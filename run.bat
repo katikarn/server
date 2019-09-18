@@ -1,0 +1,1 @@
+"D:\Odoo_app\Odoo 12.0\python\python" odoo-bin -r openpg -w openpgpwd --logfile=odoo.log --addons-path="D:\Odoo_app\Odoo 12.0\server\custom_addons"

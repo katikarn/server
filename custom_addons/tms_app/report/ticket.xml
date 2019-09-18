@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <report
+            id="report_ticket"
+            model="tms.ticket"
+            string="ใบขนส่งสินค้า"
+            name="tms_app.report_ticket_view"
+            file="tms_app.report_ticket"
+            report_type="qweb-pdf"/>
+    <template id="report_ticket_view">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <h1 style="text-align:center;margin-bottom: 20px">ใบขนส่งสินค้า</h1>
+                    <table width="100%" style="margin-bottom:30px">
+                        <tr>
+                            <td colspan="10" align="center">
+                                <img t-if="doc.ticket_no" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' %('Code128',doc.ticket_no,250,30)"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" style="padding:5px">
+                                <strong>เลขที่ :</strong>
+                            </td>
+                            <td style="padding:5px">
+                                <span t-field="doc.ticket_no"/>
+                            </td>
+                            <td align="right" style="padding:5px">
+                                <strong>สถานะ :</strong>
+                            </td>
+                            <td style="padding:5px">
+                                <h3 t-if="doc.state == 'draft'" style="color:orange;margin:0">รออนุมัติ</h3>
+                                <h3 t-if="doc.state == 'approve'" style="color:green;margin:0">อนุมัติแล้ว</h3>
+                                <h3 t-if="doc.state == 'complete'" style="color:#666;margin:0">ดำเนินการเสร็จสิ้น</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" style="padding:5px">
+                                <strong>วันที่ :</strong>
+                            </td>
+                            <td style="padding:5px">
+                                <span t-field="doc.ticket_date"/>
+                            </td>
+                            <td align="right" style="padding:5px">
+                                <strong>วันที่/เวลา เที่ยวไป :</strong>
+                            </td>
+                            <td style="padding:5px">
+                                <span t-field="doc.start_time"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" style="padding:5px">
+                                <strong>ผู้รับผิดชอบ :</strong>
+                            </td>
+                            <td style="padding:5px">
+                                <span t-field="doc.responsible_id.name"/>
+                            </td>
+                            <td align="right" style="padding:5px">
+                                <strong>วันที่/เวลา เที่ยวกลับ :</strong>
+                            </td>
+                            <td style="padding:5px">
+                                <span t-field="doc.end_time"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" style="padding:5px">
+                                <strong>ข้อมูลรถยนต์ :</strong>
+                            </td>
+                            <td style="padding:5px">
+                                <span t-field="doc.car_id.name"/>
+                                (
+                                <span t-if="doc.car_id.type == 'S'">รถเก๋ง</span>
+                                <span t-if="doc.car_id.type == 'V'">รถตู้</span>
+                                <span t-if="doc.car_id.type == 'T'">รถบรรทุก</span>
+                                )
+                                <div>
+                                    เลขทะเบียน:
+                                    <span t-field="doc.car_id.reg_id"/>
+                                </div>
+                            </td>
+                            <td align="right" style="padding:5px">
+                                <strong>ข้อมูลคนขับรถ :</strong>
+                            </td>
+                            <td style="padding:5px">
+                                <span t-field="doc.car_id.driver_name"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ลำดับ</th>
+                                <th>รายการ</th>
+                                <th>เลขเอกสาร</th>
+                                <th>หมายเหตุ</th>
+                                <th style="text-align:right">ราคา/หน่วย</th>
+                                <th style="text-align:right">จำนวน</th>
+                                <th style="text-align:right">รวมเงิน</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.ticket_items" t-as="item">
+                                <tr>
+                                    <td>
+                                        <span t-esc="item_index + 1"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="item.product_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="item.ref_doc"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="item.remark"/>
+                                    </td>
+                                    <td align="right">
+                                        <span t-field="item.price"/>
+                                    </td>
+                                    <td align="right">
+                                        <span t-field="item.qty"/>
+                                    </td>
+                                    <td align="right">
+                                        <span t-field="item.amount"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <strong>หมายเหตุ:</strong>
+                                <div>
+                                    <span t-field="doc.description"/>
+                                </div>
+                            </td>
+                            <td align="right">
+                                <table width="100%">
+                                    <tr>
+                                        <td align="right" style="padding:5px">
+                                            <strong>จำนวนสินค้ารวม :</strong>
+                                        </td>
+                                        <td style="padding:5px">
+                                            <h4 style="margin:0;text-align:right">
+                                                <span t-field="doc.total_qty"/>
+                                                หน่วย
+                                            </h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" style="padding:5px">
+                                            <strong>มูลค่าสินค้ารวม :</strong>
+                                        </td>
+                                        <td style="padding:5px">
+                                            <h4 style="margin:0;text-align:right">
+                                                <span t-field="doc.total_amount"/>
+                                                บาท
+                                            </h4>
+                                            <span t-esc="doc.get_baht_text()"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

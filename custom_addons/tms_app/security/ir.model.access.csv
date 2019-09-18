@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+tms_car_id,tms_car_name,model_tms_car,base.user_root,1,1,1,1
+tms_car_id,tms_car_name,model_tms_car,base.user_admin,1,1,1,1
+tms_car_id,tms_car_name,model_tms_car,base.group_user,1,1,1,1
+tms_ticket_id,tms_ticket_name,model_tms_ticket,base.user_root,1,1,1,1
+tms_ticket_id,tms_ticket_name,model_tms_ticket,base.user_admin,1,1,1,1
+tms_ticket_id,tms_ticket_name,model_tms_ticket,base.group_user,1,1,1,1
+tms_ticket_item_id,tms_ticket_item_name,model_tms_ticket_item,base.user_root,1,1,1,1
+tms_ticket_item_id,tms_ticket_item_name,model_tms_ticket_item,base.user_admin,1,1,1,1
+tms_ticket_item_id,tms_ticket_item_name,model_tms_ticket_item,base.group_user,1,1,1,1
+

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- ticket search view -->
+    <record model="ir.ui.view" id="ticket_search_view">
+        <field name="name">ticket.search</field>
+        <field name="model">tms.ticket</field>
+        <field name="arch" type="xml">
+            <search string="State Search">
+                <filter string="Available Tickets" name="state_search" domain="[('state', 'in', ['draft', 'approve'])]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- ticket list view -->
+    <record model="ir.ui.view" id="ticket_list_view">
+        <field name="name">ticket.list</field>
+        <field name="model">tms.ticket</field>
+        <field name="arch" type="xml">
+            <tree string="Ticket List">
+                <field name="ticket_no"/>
+                <field name="ticket_date"/>
+                <field name="responsible_id"/>
+                <field name="car_id"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ticket_form_view">
+        <field name="name">ticket.form</field>
+        <field name="model">tms.ticket</field>
+        <field name="arch" type="xml">
+            <form string="Ticket Form">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approve"/>
+                    <button string="Revise to Draft" type="object" name="do_ticket_draft" attrs="{'invisible': [('state', 'in', ['draft', 'complete'])]}"/>
+                    <button string="Approve" type="object" name="do_ticket_approve" attrs="{'invisible': [('state', 'in', ['approve', 'complete'])]}"/>
+                    <button string="Complete" type="object" class="oe_highlight" name="do_ticket_completed" attrs="{'invisible': [('state', 'in', ['complete'])]}"/>
+                </header>
+                <sheet>
+                    <h1 attrs="{'invisible': [('ticket_no', '=', False)]}">
+                        <field name="ticket_no" readonly="1"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="start_time"/>
+                            <field name="end_time"/>
+                            <field name="est_time"/>
+                            <field name="car_id"/>
+                        </group>
+                        <group>
+                            <field name="ticket_date"/>
+                            <field name="responsible_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Items">
+                            <field name="ticket_items">
+                                <tree string="Select Products" editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="ref_doc"/>
+                                    <field name="remark"/>
+                                    <field name="price"/>
+                                    <field name="qty"/>
+                                    <field name="amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="total_qty" widget="monetary"/>
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                            <label for="total_amount"/>
+                        </div>
+                        <field name="total_amount" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ticket_calendar_view">
+        <field name="name">ticket.calendar</field>
+        <field name="model">tms.ticket</field>
+        <field name="arch" type="xml">
+            <calendar string="Ticket Calendar" date_start="start_time" date_stop="end_time" color="responsible_id" mode="month">
+                <field name="ticket_no"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ticket_gantt_view">
+        <field name="name">ticket.gantt</field>
+        <field name="model">tms.ticket</field>
+        <field name="arch" type="xml">
+            <gantt string="Ticket Gantt" date_start="start_time" date_delay="est_time" default_group_by='responsible_id'>
+            </gantt>
+        </field>
+    </record>
+
+
+    <record id="tms_ticket_timeline" model="ir.ui.view">
+        <field name="model">tms.ticket</field>
+        <field name="type">timeline</field>
+        <field name="arch" type="xml">
+            <timeline date_start="start_time"
+                      date_stop="end_time"
+                      default_group_by="responsible_id"
+                      event_open_popup="true"
+            />
+        </field>
+    </record>
+
+
+</odoo>

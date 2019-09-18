@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- actions -->
+    <record model="ir.actions.act_window" id="car_list_action">
+        <field name="name">Cars</field>
+        <field name="res_model">tms.car</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Click this to create the first car</p>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ticket_list_action">
+        <field name="name">Tickets</field>
+        <field name="res_model">tms.ticket</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,calendar,timeline</field>
+        <field name="context">{"search_default_state_search":1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Click this to create the first ticket</p>
+        </field>
+    </record>
+
+    <!-- menu -->
+    <menuitem id="main_tms_menu" name="TMS"/>
+    <menuitem id="tms_menu" name="TMS" parent="main_tms_menu"/>
+    <menuitem id="ticket_menu" name="Ticket" parent="tms_menu" action="ticket_list_action" sequence="1"/>
+    <menuitem id="car_menu" name="Cars" parent="tms_menu" action="car_list_action" sequence="2"/>
+</odoo>
